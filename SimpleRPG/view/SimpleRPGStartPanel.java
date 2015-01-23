@@ -23,14 +23,19 @@ public class SimpleRPGStartPanel extends JPanel
 	private SpringLayout startLayout;
 	private JLabel userCharacter;
 	private ImageIcon userCharacterDown = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_down.png"));
+	private ImageIcon userCharacterDownTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_down_two.png"));
 	private ImageIcon userCharacterUp = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_up.png"));
+	private ImageIcon userCharacterUpTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_up_two.png"));
 	private ImageIcon userCharacterLeft = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_left.png"));
+	private ImageIcon userCharacterLeftTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_left_Two.png"));
 	private ImageIcon userCharacterRight = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_right.png"));
+	private ImageIcon userCharacterRightTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_right_Two.png"));
 	private Color darkGreen = new Color(50, 150, 30);
 	private boolean wPressed = false;
 	private boolean aPressed = false;
 	private boolean sPressed = false;
 	private boolean dPressed = false;
+	private int frameCounter = 0;
 
 	public SimpleRPGStartPanel(SimpleRPGController baseController)
 	{
@@ -44,7 +49,6 @@ public class SimpleRPGStartPanel extends JPanel
 		setupPanel();
 		setupLayout();
 		setupListners();
-		setUpTimer();
 	}
 
 	private void setupPane()
@@ -117,124 +121,122 @@ public class SimpleRPGStartPanel extends JPanel
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
-//				if ((wPressed) && (aPressed))
-//				{
-//					userCharacter.setLocation(userCharacter.getX() - 50, (userCharacter.getY() - 50));
-//				}
-//				else if ((wPressed) && (dPressed))
-//				{
-//					userCharacter.setLocation(userCharacter.getX() + 50, (userCharacter.getY() - 50));
-//				}
-//				else if ((sPressed) && (aPressed))
-//				{
-//					userCharacter.setLocation(userCharacter.getX() - 50, (userCharacter.getY() + 50));
-//				}
-//				else if ((sPressed) && (dPressed))
-//				{
-//					userCharacter.setLocation(userCharacter.getX() + 50, (userCharacter.getY() + 50));
-//				}
-//				else if (wPressed)
-//				{
-//					userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() - 50));
-//					userCharacter.setIcon(userCharacterUp);
-//				}
-//				else if (aPressed)
-//				{
-//					userCharacter.setLocation(userCharacter.getX() - 50, (userCharacter.getY()));
-//					userCharacter.setIcon(userCharacterLeft);
-//				}
-//				else if (sPressed)
-//				{
-//					userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() + 50));
-//					userCharacter.setIcon(userCharacterDown);
-//				}
-//				else if (dPressed)
-//				{
-//					userCharacter.setLocation(userCharacter.getX() + 50, (userCharacter.getY()));
-//					userCharacter.setIcon(userCharacterRight);
-//				}
 
-				// if (e.getKeyChar() == 'w')
-				// {
-				// userCharacter.setLocation(userCharacter.getX(),
-				// (userCharacter.getY() - 50));
-				// userCharacter.setIcon(userCharacterUp);
-				// }
-				// else if (e.getKeyChar() == 'a')
-				// {
-				// userCharacter.setLocation(userCharacter.getX() - 50,
-				// (userCharacter.getY()));
-				// userCharacter.setIcon(userCharacterLeft);
-				// }
-				// else if (e.getKeyChar() == 's')
-				// {
-				// userCharacter.setLocation(userCharacter.getX(),
-				// (userCharacter.getY() + 50));
-				// userCharacter.setIcon(userCharacterDown);
-				// }
-				// else if (e.getKeyChar() == 'd')
-				// {
-				// userCharacter.setLocation(userCharacter.getX() + 50,
-				// (userCharacter.getY()));
-				// userCharacter.setIcon(userCharacterRight);
-				// }
 			}
 
 		});
-		
-		
 
-	}
-
-	private void setUpTimer()
-	{
+		ActionListener update = new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if ((wPressed) && (aPressed))
+				{
+					userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() - 20));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterUp);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterUpTwo);
+					}
+				}
+				else if ((wPressed) && (dPressed))
+				{
+					userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() - 20));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterUp);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterUpTwo);
+					}
+				}
+				else if ((sPressed) && (aPressed))
+				{
+					userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() + 20));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterDown);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterDownTwo);
+					}
+				}
+				else if ((sPressed) && (dPressed))
+				{
+					userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() + 20));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterDown);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterDownTwo);
+					}
+				}
+				else if (wPressed)
+				{
+					userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() - 20));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterUp);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterUpTwo);
+					}
+					
+				}
+				else if (aPressed)
+				{
+					userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY()));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterLeft);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterLeftTwo);
+					}
+					
+				}
+				else if (sPressed)
+				{
+					userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() + 20));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterDown);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterDownTwo);
+					}
+				}
+				else if (dPressed)
+				{
+					userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY()));
+					if(frameCounter <= 4)
+					{
+						userCharacter.setIcon(userCharacterRight);
+					}
+					else if(frameCounter > 4)
+					{
+						userCharacter.setIcon(userCharacterRightTwo);
+					}
+				}
+				
+				frameCounter++;
+				frameCounter = frameCounter % 10;
+			}
+		};
+		
 		Timer myTimer = new Timer(100, update);
 		myTimer.setRepeats(true);
 		myTimer.start();
-
 	}
-
-	ActionListener update = new ActionListener()
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			if ((wPressed) && (aPressed))
-			{
-				userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() - 20));
-			}
-			else if ((wPressed) && (dPressed))
-			{
-				userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() - 20));
-			}
-			else if ((sPressed) && (aPressed))
-			{
-				userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() + 20));
-			}
-			else if ((sPressed) && (dPressed))
-			{
-				userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() + 20));
-			}
-			else if (wPressed)
-			{
-				userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() - 20));
-				userCharacter.setIcon(userCharacterUp);
-			}
-			else if (aPressed)
-			{
-				userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY()));
-				userCharacter.setIcon(userCharacterLeft);
-			}
-			else if (sPressed)
-			{
-				userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() + 20));
-				userCharacter.setIcon(userCharacterDown);
-			}
-			else if (dPressed)
-			{
-				userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY()));
-				userCharacter.setIcon(userCharacterRight);
-			}
-		}
-	};
 }
