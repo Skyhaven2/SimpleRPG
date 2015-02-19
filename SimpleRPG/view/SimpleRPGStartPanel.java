@@ -16,12 +16,14 @@ import javax.swing.Timer;
 import javax.swing.text.html.ImageView;
 
 import SimpleRPG.controller.SimpleRPGController;
+import javax.swing.SwingConstants;
 
 public class SimpleRPGStartPanel extends JPanel
 {
 	private SimpleRPGController baseController;
 	private SpringLayout startLayout;
 	private JLabel userCharacter;
+	private JLabel sword;
 	private ImageIcon userCharacterDown = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_down.png"));
 	private ImageIcon userCharacterDownTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_down_two.png"));
 	private ImageIcon userCharacterUp = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_up.png"));
@@ -30,11 +32,20 @@ public class SimpleRPGStartPanel extends JPanel
 	private ImageIcon userCharacterLeftTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_left_Two.png"));
 	private ImageIcon userCharacterRight = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_right.png"));
 	private ImageIcon userCharacterRightTwo = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_right_Two.png"));
+	private ImageIcon userCharacterDownAttackPre = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_down_attack_pre.png"));
+	private ImageIcon userCharacterDownAttack = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/rpg_character_down_attack.png"));
+	private ImageIcon swordImageBrown = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/sword.png"));
+	private ImageIcon swordImageGone = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/sword_gone.png"));
+	private ImageIcon wierdDemensionImage = new ImageIcon(SimpleRPGStartPanel.class.getResource("/SimpleRPG/view/images/link_sprite_sheet.png"));
 	private Color darkGreen = new Color(50, 150, 30);
 	private boolean wPressed = false;
 	private boolean aPressed = false;
 	private boolean sPressed = false;
 	private boolean dPressed = false;
+	private boolean spacePressed = false;
+	private int userCharacterXPosition;
+	private int userCharacterYPosition;
+	private int currentAttackSequence = 0;
 	private int frameCounter = 0;
 
 	public SimpleRPGStartPanel(SimpleRPGController baseController)
@@ -42,8 +53,9 @@ public class SimpleRPGStartPanel extends JPanel
 		this.baseController = baseController;
 
 		startLayout = new SpringLayout();
-
 		userCharacter = new JLabel(userCharacterDown);
+
+		sword = new JLabel(swordImageBrown);
 
 		setupPane();
 		setupPanel();
@@ -63,12 +75,13 @@ public class SimpleRPGStartPanel extends JPanel
 		this.setLayout(startLayout);
 		this.setBackground(darkGreen);
 		this.add(userCharacter);
+		this.add(sword);
 	}
 
 	private void setupLayout()
 	{
-		startLayout.putConstraint(SpringLayout.NORTH, userCharacter, 400, SpringLayout.NORTH, this);
-		startLayout.putConstraint(SpringLayout.EAST, userCharacter, -500, SpringLayout.EAST, this);
+		startLayout.putConstraint(SpringLayout.NORTH, userCharacter, 374, SpringLayout.NORTH, this);
+		startLayout.putConstraint(SpringLayout.WEST, userCharacter, 451, SpringLayout.WEST, this);
 	}
 
 	private void setupListners()
@@ -83,17 +96,21 @@ public class SimpleRPGStartPanel extends JPanel
 				{
 					wPressed = true;
 				}
-				else if (e.getKeyChar() == 'a')
+				if (e.getKeyChar() == 'a')
 				{
 					aPressed = true;
 				}
-				else if (e.getKeyChar() == 's')
+				if (e.getKeyChar() == 's')
 				{
 					sPressed = true;
 				}
-				else if (e.getKeyChar() == 'd')
+				if (e.getKeyChar() == 'd')
 				{
 					dPressed = true;
+				}
+				if (e.getKeyChar() == KeyEvent.VK_SPACE)
+				{
+					spacePressed = true;
 				}
 			}
 
@@ -104,17 +121,21 @@ public class SimpleRPGStartPanel extends JPanel
 				{
 					wPressed = false;
 				}
-				else if (e.getKeyChar() == 'a')
+				if (e.getKeyChar() == 'a')
 				{
 					aPressed = false;
 				}
-				else if (e.getKeyChar() == 's')
+				if (e.getKeyChar() == 's')
 				{
 					sPressed = false;
 				}
-				else if (e.getKeyChar() == 'd')
+				if (e.getKeyChar() == 'd')
 				{
 					dPressed = false;
+				}
+				if (e.getKeyChar() == KeyEvent.VK_SPACE)
+				{
+					spacePressed = false;
 				}
 			}
 
@@ -130,113 +151,144 @@ public class SimpleRPGStartPanel extends JPanel
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
-			{
-				if ((wPressed) && (aPressed))
+			{	
+				if (spacePressed)
 				{
-					userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() - 20));
-					if(frameCounter <= 4)
+					if((currentAttackSequence >= 0) && (currentAttackSequence < 5))
 					{
-						userCharacter.setIcon(userCharacterUp);
+						userCharacter.setIcon(userCharacterDownAttackPre);
+						sword.setIcon(swordImageGone);
+						currentAttackSequence++;
 					}
-					else if(frameCounter > 4)
+					else if(currentAttackSequence >= 10)
 					{
-						userCharacter.setIcon(userCharacterUpTwo);
+						currentAttackSequence = 0;
 					}
-				}
-				else if ((wPressed) && (dPressed))
-				{
-					userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() - 20));
-					if(frameCounter <= 4)
+					else if(currentAttackSequence >= 5)
 					{
-						userCharacter.setIcon(userCharacterUp);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterUpTwo);
-					}
-				}
-				else if ((sPressed) && (aPressed))
-				{
-					userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() + 20));
-					if(frameCounter <= 4)
-					{
-						userCharacter.setIcon(userCharacterDown);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterDownTwo);
-					}
-				}
-				else if ((sPressed) && (dPressed))
-				{
-					userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() + 20));
-					if(frameCounter <= 4)
-					{
-						userCharacter.setIcon(userCharacterDown);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterDownTwo);
-					}
-				}
-				else if (wPressed)
-				{
-					userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() - 20));
-					if(frameCounter <= 4)
-					{
-						userCharacter.setIcon(userCharacterUp);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterUpTwo);
+						userCharacter.setIcon(userCharacterDownAttack);
+						sword.setIcon(swordImageBrown);
+						sword.setLocation(userCharacter.getX(), userCharacter.getY() + 100);
+						currentAttackSequence++;
 					}
 					
+//					System.out.println(Integer.toString(userCharacterXPosition) + " " + Integer.toString(userCharacterYPosition));
 				}
-				else if (aPressed)
-				{
-					userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY()));
-					if(frameCounter <= 4)
-					{
-						userCharacter.setIcon(userCharacterLeft);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterLeftTwo);
-					}
-					
-				}
-				else if (sPressed)
-				{
-					userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() + 20));
-					if(frameCounter <= 4)
-					{
-						userCharacter.setIcon(userCharacterDown);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterDownTwo);
-					}
-				}
-				else if (dPressed)
-				{
-					userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY()));
-					if(frameCounter <= 4)
-					{
-						userCharacter.setIcon(userCharacterRight);
-					}
-					else if(frameCounter > 4)
-					{
-						userCharacter.setIcon(userCharacterRightTwo);
-					}
+				else
+				{ 
+					sword.setIcon(swordImageGone);
+					checkForMove();
 				}
 				
 				frameCounter++;
 				frameCounter = frameCounter % 10;
 			}
 		};
-		
+
 		Timer myTimer = new Timer(100, update);
 		myTimer.setRepeats(true);
 		myTimer.start();
+	}
+	
+	private void checkForMove()
+	{
+		if ((wPressed) && (aPressed))
+		{
+			userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() - 20));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterUp);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterUpTwo);
+			}
+		}
+		else if ((wPressed) && (dPressed))
+		{
+			userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() - 20));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterUp);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterUpTwo);
+			}
+		}
+		else if ((sPressed) && (aPressed))
+		{
+			userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY() + 20));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterDown);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterDownTwo);
+			}
+		}
+		else if ((sPressed) && (dPressed))
+		{
+			userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY() + 20));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterDown);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterDownTwo);
+			}
+		}
+		else if (wPressed)
+		{
+			userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() - 20));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterUp);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterUpTwo);
+			}
+
+		}
+		else if (aPressed)
+		{
+			userCharacter.setLocation(userCharacter.getX() - 20, (userCharacter.getY()));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterLeft);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterLeftTwo);
+			}
+
+		}
+		else if (sPressed)
+		{
+			userCharacter.setLocation(userCharacter.getX(), (userCharacter.getY() + 20));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterDown);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterDownTwo);
+			}
+		}
+		else if (dPressed)
+		{
+			userCharacter.setLocation(userCharacter.getX() + 20, (userCharacter.getY()));
+			if (frameCounter <= 4)
+			{
+				userCharacter.setIcon(userCharacterRight);
+			}
+			else if (frameCounter > 4)
+			{
+				userCharacter.setIcon(userCharacterRightTwo);
+			}
+		}
 	}
 }
